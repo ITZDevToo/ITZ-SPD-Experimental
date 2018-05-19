@@ -56,9 +56,9 @@ genesis mainnet transaction:  Coinbase(hash=44d595a172799e9adf2bac7d251cf74be214
     CTxOut(nValue=16.00, scriptPubKey=04becedf6ebadd4596964d890f677f8d2e74fdcc313c6416434384a66d6d8758d1c92de272dc6713e4a81d98841dfdfdc95e204ba915447d2fe9313435c78af3e8 OP_CHECKSIG)
 
 SPD Gen Block (Look @ Flags)
-http://explorer.stipend.me/block/870cc21f82377fd776aab71564fa3b7f8adf08f9eecc47efc9a710ffb44a361b
+http://explorer.stipend.me/api/getblock?hash=7a5541643f97ca4bff6cd7b01e3fbea04002760713320a5750276d9b9c71d845
 Block 1 (Look @ Flags)
-http://explorer.stipend.me/block/870cc21f82377fd776aab71564fa3b7f8adf08f9eecc47efc9a710ffb44a361b
+http://explorer.stipend.me/api/getblock?hash=870cc21f82377fd776aab71564fa3b7f8adf08f9eecc47efc9a710ffb44a361b
 
 ITZ Gen Block
 https://explorer.interzone.space/api/getblock?hash=00000a3e2f4ab22bae06eb1d3121262055fef0fc03da5337b1c7c153af133780
