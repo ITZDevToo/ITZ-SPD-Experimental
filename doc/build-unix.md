@@ -70,7 +70,7 @@ Optional:
 Dependencies for the GUI: Ubuntu & Debian
 ----------------------------------------------------------------------------------------------------------
 
-If you want to build Stipend-Qt, make sure that the required packages for Qt development
+If you want to build Interzone-Qt, make sure that the required packages for Qt development
 are installed. Qt 5 is necessary to build the GUI.
 If both Qt 4 and Qt 5 are installed, Qt 5 will be used.
 
@@ -82,7 +82,7 @@ libqrencode (optional) can be installed with:
 
     sudo apt-get install libqrencode-dev
 
-Once these are installed, they will be found by configure and a stipend-qt executable will be
+Once these are installed, they will be found by configure and a interzone-qt executable will be
 built by default.
 
 Berkeley DB
@@ -92,7 +92,7 @@ It is recommended to use Berkeley DB 4.8. If you have to build it yourself:
 ```bash
 STIPEND_ROOT=$(pwd)
 
-# Pick some path to install BDB to, here we create a directory within the stipend directory
+# Pick some path to install BDB to, here we create a directory within the interzone directory
 BDB_PREFIX="${STIPEND_ROOT}/db4"
 mkdir -p $BDB_PREFIX
 
@@ -108,7 +108,7 @@ cd db-4.8.30.NC/build_unix/
 ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$BDB_PREFIX
 make install
 
-# Configure Stipend Core to use our own-built instance of BDB
+# Configure Interzone Core to use our own-built instance of BDB
 cd $STIPEND_ROOT
 ./autogen.sh
 ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" # (other args...)
@@ -118,21 +118,21 @@ Notes
 -----
 1) You only need Berkeley DB if the wallet is enabled (see the section *Disable-Wallet mode* below).
 
-2) The release is built with GCC and then "strip stipendd" to strip the debug
+2) The release is built with GCC and then "strip interzoned" to strip the debug
 symbols, which reduces the executable size by about 90%.
 
 
-To Build Stipendd with compile script
+To Build Interzoned with compile script
 ---------------------
 
 The script will take care of setting the permissions and compiling static leveldb:
 
-	cd Stipend
+	cd Interzone
     chmod +x compile.sh
     ./compile.sh
 
 
-To Build Stipendd
+To Build Interzoned
 ---------------------
 
 Make sure the scripts have execute permissions:
@@ -149,26 +149,26 @@ Build LevelDB static libs first:
 With UPNP:
 
     make -f makefile.unix
-    strip stipendd
+    strip interzoned
 
 Without UPNP (Recommended) :
 
     make -f makefile.unix USE_UPNP=
-    strip stipendd
+    strip interzoned
 
 
-To Build Stipendd with compile script
+To Build Interzoned with compile script
 ---------------------
 
 The script will take care of setting the permissions and compiling static leveldb:
 
-	cd Stipend
+	cd Interzone
     chmod +x compile-qt.sh
     ./compile-qt.sh
 
 
 
-To Build Stipend-QT
+To Build Interzone-QT
 ---------------------
 
 Build LevelDB static libs first (check for file permissions in case of error)
@@ -206,7 +206,7 @@ If you need to build miniupnpc yourself:
 
 Security
 ---------------------
-To help make your stipend installation more secure by making certain attacks impossible to
+To help make your interzone installation more secure by making certain attacks impossible to
 exploit even if a vulnerability is found, you can take the following measures:
 
 * Position Independent Executable
@@ -223,7 +223,7 @@ exploit even if a vulnerability is found, you can take the following measures:
     make -f makefile.unix ... -e PIE=1
 
     To test that you have built PIE executable, install scanelf, part of paxutils, and use:
-    scanelf -e ./stipend
+    scanelf -e ./interzone
 
     The output should contain:
      TYPE
@@ -231,13 +231,13 @@ exploit even if a vulnerability is found, you can take the following measures:
 
 * Non-executable Stack
     If the stack is executable then trivial stack based buffer overflow exploits are possible if
-    vulnerable buffers are found. By default, stipend should be built with a non-executable stack
+    vulnerable buffers are found. By default, interzone should be built with a non-executable stack
     but if one of the libraries it uses asks for an executable stack or someone makes a mistake
     and uses a compiler extension which requires an executable stack, it will silently build an
     executable without the non-executable stack protection.
 
     To verify that the stack is non-executable after compiling use:
-    scanelf -e ./stipend
+    scanelf -e ./interzone
 
     the output should contain:
     STK/REL/PTL
@@ -249,17 +249,21 @@ exploit even if a vulnerability is found, you can take the following measures:
 Example of Configuration file
 ---------------------
 
-	rpcuser=stipendd
+	rpcuser=interzoned
 	rpcpassword=vejktejklungwerklcgerkum
-	rpcport=46979
+	rpcport=55680
 	rpcallowip=127.0.0.1
 	listen=1
 	server=1
-  addnode=34.225.25.154
-	addnode=52.45.189.6
-	addnode=34.232.249.188
-	addnode=34.231.228.73
-	addnode=34.239.99.171
-	addnode=18.218.0.160
-	addnode=13.59.189.252
-	addnode=52.15.218.190
+    addnode=107.172.196.203:55675
+    addnode=142.44.194.222:55675
+    addnode=188.213.168.177:55675
+    addnode=212.237.24.106:55675
+    addnode=45.76.149.139:55675
+    addnode=45.77.217.225:55675
+    addnode=45.77.33.195:55675
+    addnode=5.230.195.47:55675
+    addnode=66.70.142.219:55675
+    addnode=80.211.177.236:55675
+    addnode=89.47.160.30:55675
+    addnode=94.177.243.234:55675

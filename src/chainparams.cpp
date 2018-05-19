@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2014-2015 Dash Developers
 // Copyright (c) 2017-2018 The Stipend developers
+// Copyright (c) 2017-2018 The Interzone developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,6 +11,8 @@
 #include "main.h"
 #include "util.h"
 #include "base58.h"
+#include "protocol.h"
+#include "core.h"
 #include <boost/assign/list_of.hpp>
 
 using namespace boost::assign;
@@ -56,19 +59,14 @@ static void convertSeeds(std::vector<CAddress> &vSeedsOut, const unsigned int *d
 static void getHardcodedSeeds(std::vector<CAddress> &vSeedsOut)
 {
     std::vector<std::string> ips;
-    ips.push_back("34.225.25.154");
-    ips.push_back("52.45.189.6");
-    ips.push_back("34.232.249.188");
-    ips.push_back("34.231.228.73");
-    ips.push_back("34.239.99.171");
-    ips.push_back("18.218.0.160");
-    ips.push_back("13.59.189.252");
-    ips.push_back("52.15.218.190");
+    ips.push_back("188.226.139.237");
+    ips.push_back("104.207.133.227");
+    ips.push_back("45.63.22.217");
 
     const int64_t oneWeek = 7 * 24 * 60 * 60;
     for (size_t i = 0; i < ips.size(); ++i)
     {
-        CAddress addr(CService(ips[i], 46978));
+        CAddress addr(CService(ips[i], 55675));
         addr.nTime = GetTime() - GetRand(oneWeek) - oneWeek;
         vSeedsOut.push_back(addr);
     }
@@ -80,68 +78,156 @@ public:
         // The message start string is designed to be unlikely to occur in normal data.
         // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
         // a large 4-byte int at any alignment.
-        pchMessageStart[0] = 0xa3;
-        pchMessageStart[1] = 0xfb;
-        pchMessageStart[2] = 0xdb;
-        pchMessageStart[3] = 0xdb;
-        vAlertPubKey = ParseHex("7501131e64effceb1644efc56ed3594ef64425850aa52617506177cf245575f0aa11e5b1777cfd8621ea39a7996872a07631ea25b3fdda00df37f5e982fe58850a");
-        nDefaultPort = 46978;
-        nRPCPort = 46979;
-        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 16); // starting difficulty is 1 / 2^12
+        pchMessageStart[0] = 0x08;
+        pchMessageStart[1] = 0x02;
+        pchMessageStart[2] = 0x01;
+        pchMessageStart[3] = 0x17;
+        vAlertPubKey = ParseHex("04579f18934b3ef39094a9999e45506a1935662d0cd4e504d07beb53b8a1bfd78d81bee47e65119318397809420d5320e3c7b2aaae58580db48c38a4e6d4f0f919");
+        nDefaultPort = 55675;
+        nRPCPort = 55680;
+        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 20);
+        nSubsidyHalvingInterval = 500000; 
 
-        const char* pszTimestamp = "Update this at the day of deployment";
+        
+        const char* pszTimestamp = "The rulers of this most insecure of all worlds are rulers by accident.";
         std::vector<CTxIn> vin;
         vin.resize(1);
-        vin[0].scriptSig = CScript() << 0 << CBigNum(42) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+        vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
         std::vector<CTxOut> vout;
         vout.resize(1);
-        vout[0].SetEmpty();
+        //vout[0].SetEmpty();
+        vout[0].nValue = 16 * COIN;
+        vout[0].scriptPubKey = CScript() << ParseHex("04becedf6ebadd4596964d890f677f8d2e74fdcc313c6416434384a66d6d8758d1c92de272dc6713e4a81d98841dfdfdc95e204ba915447d2fe9313435c78af3e8") << OP_CHECKSIG;
 
-	// original 1516154401
-        CTransaction txNew(1, 1517616496, vin, vout, 0);
+        CTransaction txNew(1, 1503332100, vin, vout, 0);
+        
+
+         // uncomment to log genesis block info        
+      //  start
+        if (true && genesis.GetHash() != hashGenesisBlock)
+                       {
+                           printf("Searching for genesis block...\n");
+                          uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+                          uint256 thash;
+                         /*while (true)
+                          {
+                              thash = genesis.GetHash();
+                              if (thash <= hashTarget)
+                                  break;
+                              if ((genesis.nNonce & 0xFFF) == 0)
+                              {
+                                  printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                              }
+                              ++genesis.nNonce;
+                              if (genesis.nNonce == 0)
+                              {
+                                  printf("NONCE WRAPPED, incrementing time\n");
+                                  ++genesis.nTime;
+                              }
+                          }
+                          */
+                          printf("genesis.pszTimestamp = %s \n", pszTimestamp);
+                          printf("genesis.nBits = %u \n", genesis.nBits);
+                          printf("genesis.nTime = %u \n", genesis.nTime);
+                          printf("genesis.nNonce = %u \n", genesis.nNonce);
+                          printf("genesis.nVersion = %u \n", genesis.nVersion);
+                          printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str()); //first this, then comment this line out and uncomment the one under.
+                          printf("genesis.hashMerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str()); //improvised. worked for me, to find merkle root
+
+                      }
+
+//end
+
+        /*
+        // Genesis block
+        const char* pszTimestamp = "The rulers of this most insecure of all worlds are rulers by accident.";
+        CTransaction txNew;
+        txNew.vin.resize(1);
+        txNew.vout.resize(1);
+        txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+        txNew.vout[0].nValue = 16 * COIN;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04becedf6ebadd4596964d890f677f8d2e74fdcc313c6416434384a66d6d8758d1c92de272dc6713e4a81d98841dfdfdc95e204ba915447d2fe9313435c78af3e8") << OP_CHECKSIG;
+        */
 
         LogPrintf("genesis mainnet transaction:  %s\n", txNew.ToString().c_str());
 
         genesis.vtx.push_back(txNew);
-
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
-        genesis.nTime    = 1518016375; // Wednesday, 17-Jan-18 02:00:01 UTC
-        genesis.nBits    = bnProofOfWorkLimit.GetCompact();
-        genesis.nNonce   = 644221;
+        genesis.nTime    = 1503332100;
+        genesis.nBits    = 0x1e0fffff;
+        //genesis.nBits    = bnProofOfWorkLimit.GetCompact();
+        genesis.nNonce   = 294622;
+
+  // uncomment to log genesis block info        
+      //  start
+        if (true && genesis.GetHash() != hashGenesisBlock)
+                       {
+                           printf("Searching for genesis block...\n");
+                          uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+                          uint256 thash;
+                         /*while (true)
+                          {
+                              thash = genesis.GetHash();
+                              if (thash <= hashTarget)
+                                  break;
+                              if ((genesis.nNonce & 0xFFF) == 0)
+                              {
+                                  printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                              }
+                              ++genesis.nNonce;
+                              if (genesis.nNonce == 0)
+                              {
+                                  printf("NONCE WRAPPED, incrementing time\n");
+                                  ++genesis.nTime;
+                              }
+                          }
+                          */
+                          printf("genesis.pszTimestamp = %s \n", pszTimestamp);
+                          printf("genesis.nBits = %u \n", genesis.nBits);
+                          printf("genesis.nTime = %u \n", genesis.nTime);
+                          printf("genesis.nNonce = %u \n", genesis.nNonce);
+                          printf("genesis.nVersion = %u \n", genesis.nVersion);
+                          printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str()); //first this, then comment this line out and uncomment the one under.
+                          printf("genesis.hashMerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str()); //improvised. worked for me, to find merkle root
+
+                      }
+
+//end
 
         hashGenesisBlock = genesis.GetHash();
 
-        assert(hashGenesisBlock == uint256("0x7a5541643f97ca4bff6cd7b01e3fbea04002760713320a5750276d9b9c71d845"));
-        assert(genesis.hashMerkleRoot == uint256("0xc556e8828b26bdd1d9b09a7a51e19c554c015098f129d204020df9db58cb563c"));
+        assert(hashGenesisBlock == uint256("0x00000a3e2f4ab22bae06eb1d3121262055fef0fc03da5337b1c7c153af133780"));
+        assert(genesis.hashMerkleRoot == uint256("0x11f8d6fdf5460c2308b76da69942dd9fa386f9d337fbc95f669d73bcf02b64a5"));
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,63); // S
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,21);
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,23);
-        base58Prefixes[STEALTH_ADDRESS] = std::vector<unsigned char>(1,41);
-        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x99)(0x75)(0x45)(0xE2).convert_to_container<std::vector<unsigned char> >();
-        base58Prefixes[EXT_SECRET_KEY] = list_of(0x99)(0x73)(0x43)(0xE3).convert_to_container<std::vector<unsigned char> >();
+
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,0);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,28 + 128);  
+        //base58Prefixes[STEALTH_ADDRESS] = std::vector<unsigned char>(1,41);
+        //base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x99)(0x75)(0x45)(0xE2).convert_to_container<std::vector<unsigned char> >();
+        //base58Prefixes[EXT_SECRET_KEY] = list_of(0x99)(0x73)(0x43)(0xE3).convert_to_container<std::vector<unsigned char> >();
 
 	// NOTE: MODIFIED THIS TO 0.0.0.0
-        vSeeds.push_back(CDNSSeedData("1",  "34.225.25.154"));
-	vSeeds.push_back(CDNSSeedData("2",  "52.45.189.6"));
-	vSeeds.push_back(CDNSSeedData("3",  "34.232.249.188"));
-	vSeeds.push_back(CDNSSeedData("4",  "34.231.228.73"));
-	vSeeds.push_back(CDNSSeedData("5",  "34.239.99.171"));
-	vSeeds.push_back(CDNSSeedData("6",  "18.218.0.160"));
-	vSeeds.push_back(CDNSSeedData("7",  "13.59.189.252"));
-	vSeeds.push_back(CDNSSeedData("8",  "52.15.218.190"));
+    vSeeds.push_back(CDNSSeedData("1",  "188.226.139.237"));
+	vSeeds.push_back(CDNSSeedData("2",  "104.207.133.227"));
+	vSeeds.push_back(CDNSSeedData("3",  "45.63.22.217"));
+	//vSeeds.push_back(CDNSSeedData("4",  "34.231.228.73"));
+	//vSeeds.push_back(CDNSSeedData("5",  "34.239.99.171"));
+	//vSeeds.push_back(CDNSSeedData("6",  "18.218.0.160"));
+	//vSeeds.push_back(CDNSSeedData("7",  "13.59.189.252"));
+	//vSeeds.push_back(CDNSSeedData("8",  "52.15.218.190"));
 
 	convertSeeds(vFixedSeeds, pnSeed, ARRAYLEN(pnSeed), nDefaultPort);
 
         getHardcodedSeeds(vFixedSeeds);
 
         nPoolMaxTransactions = 3;
-        strDarksendPoolDummyAddress = "hFoQDUrp63QWqFhjEr3Fmc4ubHRhyzjKUC";
+        strDarksendPoolDummyAddress = "175M2dV2DaEJWcTjxrGPJT88WDUE7Bj44U";
 
-        nLastPOWBlock = 210000;
-        nPOSStartBlock = 1500;
+        nLastPOWBlock = 450000;
+        nPOSStartBlock = 210000;
     }
 
     virtual const CBlock& GenesisBlock() const { return genesis; }
@@ -167,36 +253,35 @@ public:
         // The message start string is designed to be unlikely to occur in normal data.
         // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
         // a large 4-byte int at any alignment.
-        pchMessageStart[0] = 0xc4;
-        pchMessageStart[1] = 0xd5;
-        pchMessageStart[2] = 0xa6;
-        pchMessageStart[3] = 0xb8;
-        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 16);
-        vAlertPubKey = ParseHex("7501131e15af76eb1d0e4a656ed3594ef64425850aa52617506177cf245575f0aa11e5b1777cfd8621ea39a7996872a07631ea25b3fdda00df37f5e982fe58850a");
-        nDefaultPort = 59432;
-        nRPCPort = 59433;
+        pchMessageStart[0] = 0xfb;
+        pchMessageStart[1] = 0xc2;
+        pchMessageStart[2] = 0x11;
+        pchMessageStart[3] = 0x02;
+        //bnProofOfWorkLimit = CBigNum(~uint256(0) >> 20);
+        vAlertPubKey = ParseHex("04c4d925d462a89054155314a7068bb8cf6d7c030d76491e6cc97fefcc4ab8c3665bfb34c3aba0e12b9fb4fab47502a00938dd93e0e675c4713ee47200046de2e3");
+        nDefaultPort = 21817;
+        nRPCPort = 21818;
         strDataDir = "testnet";
-        genesis.nTime    = 1518016375;
-        genesis.nBits    = bnProofOfWorkLimit.GetCompact();
-        genesis.nNonce   = 353314;
+        genesis.nTime    = 1503324223;
+        //genesis.nBits    = 0x207fffff();
+        genesis.nNonce   = 1088722;
 
         hashGenesisBlock = genesis.GetHash();
 
         LogPrintf("Display genesis hash so we can input it below %s\n", hashGenesisBlock.ToString().c_str());
 	      LogPrintf("Display merkle root so we can input it below %s\n", genesis.hashMerkleRoot.ToString().c_str());
 
-        assert(hashGenesisBlock == uint256("0xe133d1d3f584f1c3f561e7d0606fa87dabb869325a979c2a82e2f3943c0e3370"));
-        assert(genesis.hashMerkleRoot == uint256("0xc556e8828b26bdd1d9b09a7a51e19c554c015098f129d204020df9db58cb563c"));
+        assert(hashGenesisBlock == uint256("0x0000016920f7856a2a4f342db39b70591c00a699f1fe865ebc687fd9b66aa586"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,85); // b
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,23);
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,25);
-        base58Prefixes[STEALTH_ADDRESS] = std::vector<unsigned char>(1,43);
-        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x98)(0x74)(0x44)(0xE1).convert_to_container<std::vector<unsigned char> >();
-        base58Prefixes[EXT_SECRET_KEY] = list_of(0x98)(0x72)(0x42)(0xE2).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,102);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,44);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,88 + 128);
+        //base58Prefixes[STEALTH_ADDRESS] = std::vector<unsigned char>(1,43);
+        //base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x98)(0x74)(0x44)(0xE1).convert_to_container<std::vector<unsigned char> >();
+        //base58Prefixes[EXT_SECRET_KEY] = list_of(0x98)(0x72)(0x42)(0xE2).convert_to_container<std::vector<unsigned char> >();
 
         convertSeeds(vFixedSeeds, pnTestnetSeed, ARRAYLEN(pnTestnetSeed), nDefaultPort);
 

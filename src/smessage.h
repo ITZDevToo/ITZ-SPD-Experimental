@@ -166,7 +166,7 @@ public:
 
 
 // -- get at the data
-class CStipendAddress_B : public CStipendAddress
+class CInterzoneAddress_B : public CInterzoneAddress
 {
 public:
     uint8_t getVersion()

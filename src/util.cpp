@@ -78,7 +78,7 @@ bool fLiteMode = false;
 bool fEnableInstantX = true;
 int nInstantXDepth = 10;
 int nDarksendRounds = 2;
-int nAnonymizeStipendAmount = 1000;
+int nAnonymizeInterzoneAmount = 1000;
 int nLiquidityProvider = 0;
 /** Spork enforcement enabled time */
 int64_t enforceMasternodePaymentsTime = 4085657524;
@@ -1043,7 +1043,7 @@ static std::string FormatException(std::exception* pex, const char* pszThread)
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "stipend";
+    const char* pszModule = "interzone";
 #endif
     if (pex)
         return strprintf(
@@ -1073,13 +1073,13 @@ void PrintExceptionContinue(std::exception* pex, const char* pszThread)
 boost::filesystem::path GetDefaultDataDir()
 {
     namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Stipend
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Stipend
-    // Mac: ~/Library/Application Support/Stipend
-    // Unix: ~/.stipend
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Interzone
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Interzone
+    // Mac: ~/Library/Application Support/Interzone
+    // Unix: ~/.interzone
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Stipend";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Interzone";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -1091,10 +1091,10 @@ boost::filesystem::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     fs::create_directory(pathRet);
-    return pathRet / "Stipend";
+    return pathRet / "Interzone";
 #else
     // Unix
-    return pathRet / ".stipend";
+    return pathRet / ".interzone";
 #endif
 #endif
 }
@@ -1143,7 +1143,7 @@ void ClearDatadirCache()
 
 boost::filesystem::path GetConfigFile()
 {
-    boost::filesystem::path pathConfigFile(GetArg("-conf", "stipend.conf"));
+    boost::filesystem::path pathConfigFile(GetArg("-conf", "interzone.conf"));
     if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir(false) / pathConfigFile;
     return pathConfigFile;
 }
@@ -1188,7 +1188,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 
 boost::filesystem::path GetPidFile()
 {
-    boost::filesystem::path pathPidFile(GetArg("-pid", "stipendd.pid"));
+    boost::filesystem::path pathPidFile(GetArg("-pid", "interzoned.pid"));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }

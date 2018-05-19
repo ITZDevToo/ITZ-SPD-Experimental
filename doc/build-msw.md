@@ -16,17 +16,21 @@ WINDOWS BUILD NOTES
 Example of Configuration file
 ---------------------
 
-	rpcuser=stipendd
+	rpcuser=interzoned
 	rpcpassword=vejktejklungwerklcgerkum
-	rpcport=46979
+	rpcport=55680
 	rpcallowip=127.0.0.1
 	listen=1
 	server=1
-	addnode=34.225.25.154
-	addnode=52.45.189.6
-	addnode=34.232.249.188
-	addnode=34.231.228.73
-	addnode=34.239.99.171
-	addnode=18.218.0.160
-	addnode=13.59.189.252
-	addnode=52.15.218.190
+	addnode=107.172.196.203:55675
+	addnode=142.44.194.222:55675
+	addnode=188.213.168.177:55675
+	addnode=212.237.24.106:55675
+	addnode=45.76.149.139:55675
+	addnode=45.77.217.225:55675
+	addnode=45.77.33.195:55675
+	addnode=5.230.195.47:55675
+	addnode=66.70.142.219:55675
+	addnode=80.211.177.236:55675
+	addnode=89.47.160.30:55675
+	addnode=94.177.243.234:55675

@@ -66,13 +66,13 @@ void OptionsModel::Init()
     if (!settings.contains("nDarksendRounds"))
         settings.setValue("nDarksendRounds", 2);
     nDarksendRounds = settings.value("nDarksendRounds").toLongLong();
-    if (!settings.contains("nAnonymizeStipendAmount"))
-        settings.setValue("nAnonymizeStipendAmount", 1000);
-    nAnonymizeStipendAmount = settings.value("nAnonymizeStipendAmount").toLongLong();
+    if (!settings.contains("nAnonymizeInterzoneAmount"))
+        settings.setValue("nAnonymizeInterzoneAmount", 1000);
+    nAnonymizeInterzoneAmount = settings.value("nAnonymizeInterzoneAmount").toLongLong();
     if (settings.contains("nDarksendRounds"))
         SoftSetArg("-darksendrounds", settings.value("nDarksendRounds").toString().toStdString());
-    if (settings.contains("nAnonymizeStipendAmount"))
-        SoftSetArg("-anonymizestipendamount", settings.value("nAnonymizeStipendAmount").toString().toStdString());
+    if (settings.contains("nAnonymizeInterzoneAmount"))
+        SoftSetArg("-anonymizeinterzoneamount", settings.value("nAnonymizeInterzoneAmount").toString().toStdString());
 
 
 
@@ -206,8 +206,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return fCoinControlFeatures;
         case DarksendRounds:
             return QVariant(nDarksendRounds);
-        case AnonymizeStipendAmount:
-            return QVariant(nAnonymizeStipendAmount);
+        case AnonymizeInterzoneAmount:
+            return QVariant(nAnonymizeInterzoneAmount);
         case UseBlackTheme:
             return QVariant(fUseBlackTheme);
         default:
@@ -318,10 +318,10 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             settings.setValue("nDarksendRounds", nDarksendRounds);
             emit darksendRoundsChanged(nDarksendRounds);
             break;
-        case AnonymizeStipendAmount:
-            nAnonymizeStipendAmount = value.toInt();
-            settings.setValue("nAnonymizeStipendAmount", nAnonymizeStipendAmount);
-            emit AnonymizeStipendAmountChanged(nAnonymizeStipendAmount);
+        case AnonymizeInterzoneAmount:
+            nAnonymizeInterzoneAmount = value.toInt();
+            settings.setValue("nAnonymizeInterzoneAmount", nAnonymizeInterzoneAmount);
+            emit AnonymizeInterzoneAmountChanged(nAnonymizeInterzoneAmount);
             break;
         default:
             break;

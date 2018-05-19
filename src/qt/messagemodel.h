@@ -67,7 +67,7 @@ struct MessageTableEntry
     }
 };
 
-/** Interface to Stipend Secure Messaging from Qt view code. */
+/** Interface to Interzone Secure Messaging from Qt view code. */
 class MessageModel : public QAbstractTableModel
 {
     Q_OBJECT

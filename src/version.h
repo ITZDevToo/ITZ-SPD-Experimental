@@ -30,42 +30,39 @@ static const int DATABASE_VERSION = 70509;
 // network protocol versioning
 //
 
-static const int PROTOCOL_VERSION = 11002;
-static const int GETHEADERS_VERSION = 70077;
+static const int PROTOCOL_VERSION = 80005;
 
 // intial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
 
 // disconnect from peers older than this proto version
-static const int MIN_PEER_PROTO_VERSION = 11001;
-static const int MIN_PEER_PROTO_VERSION_FORK1 = 11002;
+static const int MIN_PEER_PROTO_VERSION = 80003;
+static const int MIN_PEER_PROTO_VERSION_FORK1 = 80006;
 
 // minimum peer version accepted by DarkSendPool
-static const int MIN_POOL_PEER_PROTO_VERSION = 11001;
-static const int MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT = 70911;
-static const int MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT = 70912;
+static const int MIN_POOL_PEER_PROTO_VERSION = 80003;
 
-static const int MIN_INSTANTX_PROTO_VERSION = 11001;
+static const int MIN_INSTANTX_PROTO_VERSION = 80003;
 
 //! minimum peer version that can receive masternode payments
 // V1 - Last protocol version before update
 // V2 - Newest protocol version
-static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_1 = 11001;
-static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_2 = 11001;
+static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_1 = 80003;
+static const int MIN_MASTERNODE_PAYMENT_PROTO_VERSION_2 = 80003;
 
 // nTime field added to CAddress, starting with this version;
 // if possible, avoid requesting addresses nodes older than this
-static const int CADDR_TIME_VERSION = 11000;
+static const int CADDR_TIME_VERSION = 31402;
 
 // only request blocks from nodes outside this range of versions
-static const int NOBLKS_VERSION_START = 11000;
-static const int NOBLKS_VERSION_END = 11001;
-static const int NOBLKS_VERSION_END_FORK1 = 11002;
+static const int NOBLKS_VERSION_START = 32000;
+static const int NOBLKS_VERSION_END = 32400;
+static const int NOBLKS_VERSION_END_FORK1 = 80006;
 
 // BIP 0031, pong message, is enabled for all versions AFTER this one
-static const int BIP0031_VERSION = 11000;
+static const int BIP0031_VERSION = 60000;
 
 // "mempool" command, enhanced "getdata" behavior starts with this version:
-static const int MEMPOOL_GD_VERSION = 11000;
+static const int MEMPOOL_GD_VERSION = 60002;
 
 #endif

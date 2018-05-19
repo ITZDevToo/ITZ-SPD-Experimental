@@ -45,20 +45,20 @@ bool CMasternodeConfig::read(boost::filesystem::path path) {
             }
             CBitcoinAddress address(donationAddress);
             if (!address.IsValid()) {
-                LogPrintf("InvalidSPDaddress in masternode.conf line: %s\n", line.c_str());
+                LogPrintf("InvalidITZaddress in masternode.conf line: %s\n", line.c_str());
                 streamConfig.close();
                 return false;
             }
         }
 
         if(Params().NetworkID() == CChainParams::MAIN){
-            if(CService(ip).GetPort() != 46978) {
-                LogPrintf("Invalid port detected in masternode.conf: %s (must be 46978 for mainnet)\n", line.c_str());
+            if(CService(ip).GetPort() != 55675) {
+                LogPrintf("Invalid port detected in masternode.conf: %s (must be 55675 for mainnet)\n", line.c_str());
                 streamConfig.close();
                 return false;
             }
-        } else if(CService(ip).GetPort() == 46978) {
-            LogPrintf("Invalid port detected in masternode.conf: %s (46978 must be only on mainnet)\n", line.c_str());
+        } else if(CService(ip).GetPort() == 55675) {
+            LogPrintf("Invalid port detected in masternode.conf: %s (55675 must be only on mainnet)\n", line.c_str());
             streamConfig.close();
             return false;
         }

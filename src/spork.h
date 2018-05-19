@@ -32,14 +32,12 @@ using namespace boost;
 #define SPORK_11_RESET_BUDGET                                 10010
 #define SPORK_12_RECONSIDER_BLOCKS                            10011
 #define SPORK_13_ENABLE_SUPERBLOCKS                           10012
-#define SPORK_14_NEW_PROTOCOL_ENFORCEMENT                     10013
-#define SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2                   10014
 
 #define SPORK_1_MASTERNODE_PAYMENTS_ENFORCEMENT_DEFAULT       2428537599  //2015-4-8 23:59:59 GMT // NOT USED
 #define SPORK_2_INSTANTX_DEFAULT                              978307200   //2001-1-1 23:59:59 GMT
 #define SPORK_3_INSTANTX_BLOCK_FILTERING_DEFAULT              978307200   //2001-1-1 23:59:59 GMT
 #define SPORK_4_RECONVERGE_DEFAULT                            1451606400  //2016-01-01 // NOT USED
-#define SPORK_5_MAX_VALUE_DEFAULT                             500         //500 SPD
+#define SPORK_5_MAX_VALUE_DEFAULT                             500         //500 ITZ
 #define SPORK_6_REPLAY_BLOCKS_DEFAULT                         0 		  // NOT USED
 #define SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT_DEFAULT        4070908800   //OFF
 #define SPORK_9_MASTERNODE_BUDGET_ENFORCEMENT_DEFAULT         4070908800   //OFF
@@ -47,8 +45,6 @@ using namespace boost;
 #define SPORK_11_RESET_BUDGET_DEFAULT                         0
 #define SPORK_12_RECONSIDER_BLOCKS_DEFAULT                    0
 #define SPORK_13_ENABLE_SUPERBLOCKS_DEFAULT                   4070908800   //OFF
-#define SPORK_14_NEW_PROTOCOL_ENFORCEMENT_DEFAULT             4070908800
-#define SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2_DEFAULT           4070908800
 
 class CSporkMessage;
 class CSporkManager;
@@ -117,8 +113,8 @@ private:
 public:
 
     CSporkManager() {
-        strMainPubKey = "02626bfeb86bc74a803055081e494e450b41d7555ad44cf448b5f9dd66e1c3e5d9";
-        strTestPubKey = "02626bfeb86bc74a803055081e494e450b41d7555ad44cf448b5f9dd66e1c3e5d9";
+        strMainPubKey = "04d30fc81685398b8a9f560145ca994f23cc38775e731ebf50f89ef7ead069c312c733ce17450b2c24fff3ed945e5bd096866d1445424f7ed81710f1a8e667ea5d";
+        strTestPubKey = "04d436c5ea78789b7bd4708c296b61cf2c0a14d0870245d164078e3c126dec0dd7ee041538437afd72508def9862f0f65160de94c9f48861a6a7b25bd59879eeef";
     }
 
     std::string GetSporkNameByID(int id);

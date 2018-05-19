@@ -16,7 +16,7 @@
 
 #include <vector>
 
-/** A hasher class for Stipend's 256-bit hash (double SHA-256). */
+/** A hasher class for Interzone's 256-bit hash (double SHA-256). */
 class CHash256 {
 private:
     CSHA256 sha;
@@ -40,7 +40,7 @@ public:
     }
 };
 
-/** A hasher class for Stipend's 160-bit hash (SHA-256 + RIPEMD-160). */
+/** A hasher class for Interzone's 160-bit hash (SHA-256 + RIPEMD-160). */
 class CHash160 {
 private:
     CSHA256 sha;
@@ -173,6 +173,8 @@ inline uint160 Hash160(const std::vector<unsigned char>& vch)
 {
     return Hash160(vch.begin(), vch.end());
 }
+
+unsigned int MurmurHash3(unsigned int nHashSeed, const std::vector<unsigned char>& vDataToHash);
 
 typedef struct
 {

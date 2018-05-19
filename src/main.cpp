@@ -79,12 +79,11 @@ set<pair<COutPoint, unsigned int> > setStakeSeenOrphan;
 
 map<uint256, CTransaction> mapOrphanTransactions;
 map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
-map<uint256, int64_t> mapRejectedBlocks;
 
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "Stipend Signed Message:\n";
+const string strMessageMagic = "Interzone Signed Message:\n";
 
 std::set<uint256> setValidatedTx;
 
@@ -1362,29 +1361,27 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
 
     int64_t nSubsidy = 0 * COIN;
 
-    if (nHeight == 1) {
-        nSubsidy = 475000 * COIN; // premine
+    if (nHeight == 0) {
+        //nSubsidy = 460000 * COIN; // premine
+        nSubsidy = 16 * COIN; // premine
     }
-    else if (nHeight > 1 && nHeight <= 100) {
-        nSubsidy = 1 * COIN; // instamine prevention
+    else if (nHeight > 1 && nHeight <= 1000) {
+        nSubsidy = 0.01 * COIN; // instamine prevention
     }
-    else if (nHeight > 100 && nHeight <= 200) {
-        nSubsidy = 5 * COIN; // instamine prevention
+    else if (nHeight > 1000 && nHeight <= 20000) {
+        nSubsidy = 23 * COIN; // 100%
     }
-    else if (nHeight > 200 && nHeight <= 300) {
-        nSubsidy = 10 * COIN; // instamine prevention
-    }
-    else if (nHeight > 300 && nHeight <= 400) {
-        nSubsidy = 15 * COIN; // instamine prevention
-    }
-    else if (nHeight > 400 && nHeight <= 1499) {
-        nSubsidy = 25 * COIN; // initial block reward
-    }
-    else if (nHeight > 1499 && nHeight <= 210000) {
-        nSubsidy = 15 * COIN; // initial block reward
+    else if (nHeight > 20000 && nHeight <= 210000) {
+        nSubsidy = 17.25 * COIN; // 75%
     }
     else if (nHeight > 210000) {
-        nSubsidy = 0 * COIN; // initial block reward
+        nSubsidy = 12.25 * COIN; // 53%
+    }
+    else if (nHeight > 500000) {
+        nSubsidy = 6.125 * COIN; // 53% post rewards reduction
+    }
+    else if (nHeight > 1000000) {
+        nSubsidy = 3.0625 * COIN; // 53% post second rewards reduction
     }
 
     // add fees.
@@ -1396,59 +1393,32 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
 {
     int64_t nSubsidy = 0;
 
-    if (pindexBest->nHeight+1 > 1500 && pindexBest->nHeight+1 <= 210000)  {
-        nSubsidy = 35 * COIN;
+    if (pindexBest->nHeight+1 > 20000 && pindexBest->nHeight+1 <= 210000)  {
+        nSubsidy = 5.75 * COIN;
     }
-    else if (pindexBest->nHeight+1 > 210000 && pindexBest->nHeight+1 <= 420001)  {
-        nSubsidy = 20 * COIN;
+    else if (pindexBest->nHeight+1 > 210000 && pindexBest->nHeight+1 <= 500001)  {
+        nSubsidy = 10.75 * COIN;
     }
-    else if (pindexBest->nHeight+1 > 420001 && pindexBest->nHeight+1 <= 630001) {
-        nSubsidy = 10 * COIN;
+    else if (pindexBest->nHeight+1 > 500001 && pindexBest->nHeight+1 <= 1000001) {
+        nSubsidy = 5.375 * COIN;
     }
-    else if (pindexBest->nHeight+1 > 630001 && pindexBest->nHeight+1 <= 840001) {
-        nSubsidy = 5 * COIN;
+    else if (pindexBest->nHeight+1 > 1000001 && pindexBest->nHeight+1 <= 1890000) {
+        nSubsidy = 2.6875 * COIN;
     }
     else if (pindexBest->nHeight+1 > 840001 && pindexBest->nHeight+1 <= 1890000) {
 	// end game - further discussion needed
-        nSubsidy = 3 * COIN;
+        nSubsidy = 2.6875 * COIN;
     } else if (pindexBest->nHeight+1 > 1890000) {
 	// end game - further discussion needed
-        nSubsidy = 3 * COIN;
+        nSubsidy = 2.6875 * COIN;
         nSubsidy >>= ((pindexBest->nHeight + 210000) / 1050000);
     }
 
     return nSubsidy + nFees;
 }
 
-int64_t GetBlockValue(int nHeight)
-{
-    int64_t nSubsidy = 0;
-
-    if (pindexBest->nHeight+1 > 1500 && pindexBest->nHeight+1 <= 210000)  {
-        nSubsidy = 35 * COIN;
-    }
-    else if (pindexBest->nHeight+1 > 210000 && pindexBest->nHeight+1 <= 420001)  {
-        nSubsidy = 20 * COIN;
-    }
-    else if (pindexBest->nHeight+1 > 420001 && pindexBest->nHeight+1 <= 630001) {
-        nSubsidy = 10 * COIN;
-    }
-    else if (pindexBest->nHeight+1 > 630001 && pindexBest->nHeight+1 <= 840001) {
-        nSubsidy = 5 * COIN;
-    }
-    else if (pindexBest->nHeight+1 > 840001 && pindexBest->nHeight+1 <= 1890000) {
-  // end game - further discussion needed
-        nSubsidy = 3 * COIN;
-    } else if (pindexBest->nHeight+1 > 1890000) {
-  // end game - further discussion needed
-        nSubsidy = 3 * COIN;
-        nSubsidy >>= ((pindexBest->nHeight + 210000) / 1050000);
-    }
-
-    return nSubsidy;
-}
-
-static int64_t nTargetTimespan = 5 * 90;
+//static int64_t nTargetTimespan = 5 * 90;
+static int64_t nTargetTimespan = 90;
 
 // ppcoin: find last block index up to pindex
 const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake)
@@ -1818,10 +1788,17 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs, map<uint256, CTx
 
         if (!IsCoinStake())
         {
+            if (nValueIn < GetValueOut())
+                return DoS(100, error("ConnectInputs() : %s value in < value out", GetHash().ToString()));
+
             // Tally transaction fees
             int64_t nTxFee = nValueIn - GetValueOut();
+            if (nTxFee < 0)
+                return DoS(100, error("ConnectInputs() : %s nTxFee < 0", GetHash().ToString()));
+
             nFees += nTxFee;
-        }
+            if (!MoneyRange(nFees))
+                return DoS(100, error("ConnectInputs() : nFees out of range"));         }
     }
 
     return true;
@@ -2556,7 +2533,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                 BOOST_FOREACH(const CTxIn& in, tx.vin){
                     if(mapLockedInputs.count(in.prevout)){
                         if(mapLockedInputs[in.prevout] != tx.GetHash()){
-                            LogPrintf("CheckBlock() : found conflicting transaction with transaction lock %s %s\n", mapLockedInputs[in.prevout].ToString().c_str(), tx.GetHash().ToString().c_str());
+                            if(fDebug) { LogPrintf("CheckBlock() : found conflicting transaction with transaction lock %s %s\n", mapLockedInputs[in.prevout].ToString().c_str(), tx.GetHash().ToString().c_str()); }
                             return DoS(0, error("CheckBlock() : found conflicting transaction with transaction lock"));
                         }
                     }
@@ -2567,7 +2544,10 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
         if(fDebug) { LogPrintf("CheckBlock() : skipping transaction locking checks\n"); }
     }
 
+
+
     // ----------- masternode payments -----------
+
     bool MasternodePayments = false;
     bool fIsInitialDownload = IsInitialBlockDownload();
 
@@ -2611,7 +2591,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
 
                     CTxDestination address1;
                     ExtractDestination(payee, address1);
-                    CStipendAddress address2(address1);
+                    CInterzoneAddress address2(address1);
 
                     if(!foundPaymentAndPayee) {
                         if(fDebug) { LogPrintf("CheckBlock() : Couldn't find masternode payment(%d|%d) or payee(%d|%s) nHeight %d. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, address2.ToString().c_str(), pindexBest->nHeight+1); }
@@ -2629,8 +2609,16 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
             if(fDebug) { LogPrintf("CheckBlock() : skipping masternode payment checks\n"); }
         }
     } else {
-          if(fDebug) { LogPrintf("CheckBlock() : Is initial download, skipping masternode payment check %d\n", pindexBest->nHeight+1); }
+        if(fDebug) { LogPrintf("CheckBlock() : Is initial download, skipping masternode payment check %d\n", pindexBest->nHeight+1); }
     }
+
+
+
+
+
+
+
+
 
     // Check transactions
     BOOST_FOREACH(const CTransaction& tx, vtx)
@@ -3314,7 +3302,7 @@ struct CImportingNow
 
 void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 {
-    RenameThread("stipend-loadblk");
+    RenameThread("interzone-loadblk");
 
     CImportingNow imp;
 
@@ -3610,6 +3598,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         CAddress addrFrom;
         uint64_t nNonce = 1;
         vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
+
         if ((pfrom->nVersion < MIN_PEER_PROTO_VERSION) || (nBestHeight >= 112500 && pfrom->nVersion < MIN_PEER_PROTO_VERSION_FORK1))
         {
             // disconnect from peers older than this proto version
@@ -4261,24 +4250,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
 
     return true;
-}
-
-int ActiveProtocol()
-{
-
-    // SPORK_14 was used for 70910. Leave it 'ON' so they don't see > 70910 nodes. They won't react to SPORK_15
-    // messages because it's not in their code
-
-/*    if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))
-            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-*/
-
-    // SPORK_15 is used for 70911. Nodes < 70911 don't see it and still get their protocol version via SPORK_14 and their
-    // own ModifierUpgradeBlock()
-
-    if (IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
-            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-    return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }
 
 // requires LOCK(cs_vRecvMsg)
